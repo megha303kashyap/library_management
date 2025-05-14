@@ -58,7 +58,7 @@ def register_member():
     print("✅ Member registered successfully.")
 
 # 🔓 Login
-def login():
+def member_login():
     members = load_members()
     member_id = input("Member ID: ")
     password = getpass.getpass("Password: ")
@@ -67,6 +67,17 @@ def login():
         if m.MemberID == member_id and verify_password(password, m.PasswordHash):
             print(f"✅ Welcome, {m.Name}!")
             return m  # Logged-in Member object
+
+    print("❌ Invalid credentials.")
+    return None
+
+def librarian_login():
+    lib_id = input("Librarian ID: ")
+    password = getpass.getpass("Password: ")
+
+    if lib_id == 'admin' and password == '123456':
+        print(f"✅ Welcome, Librarian!")
+        return 'admin'
 
     print("❌ Invalid credentials.")
     return None

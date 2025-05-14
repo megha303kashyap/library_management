@@ -2,6 +2,8 @@ import csv
 import os
 from models import Book, Member, Loan
 
+BOOKS_CSV = 'data/books.csv'
+
 def _csv_path(data_dir, name):
     return os.path.join(data_dir, name + '.csv')
 
@@ -13,11 +15,14 @@ def load_books(data_dir):
     with open(path, newline='') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            books.append(Book(**row, CopiesTotal=int(row['CopiesTotal']), CopiesAvailable=int(row['CopiesAvailable'])))
+            books.append(Book(ISBN=row['ISBN'], Title=row['Title'], Author=row['Author'], 
+                              CopiesTotal=int(row['CopiesTotal']), 
+                              CopiesAvailable=int(row['CopiesAvailable'])))
     return books
 
 def save_books(data_dir, books):
     path = _csv_path(data_dir, 'books')
+    print(path)
     with open(path, 'w', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=Book.__annotations__.keys())
         writer.writeheader()
