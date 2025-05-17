@@ -7,7 +7,7 @@ from storage import (
     load_members, save_members,
     load_loans, save_loans
 )
-from auth import register_member, login
+from auth import register_member, member_login, librarian_login
 
 def valid_isbn(isbn):
     return isbn.isdigit() and (len(isbn) == 10 or len(isbn) == 13)
@@ -71,15 +71,8 @@ def add_book(data_dir):
     print("✔ Book added.")
 
 def register_member_flow(data_dir):
-    name = input("Name: ").strip()
-    member_id = input("Member ID: ").strip()
-    pw1 = input("Password: ").strip()
-    pw2 = input("Confirm Password: ").strip()
-    if pw1 != pw2:
-        print("Password mismatch.")
-        return
     try:
-        register_member(data_dir, name, member_id, pw1)
+        register_member()
         print("✔ Member registered.")
     except ValueError as e:
         print(e)
@@ -206,14 +199,14 @@ def main():
         print("1. Librarian Login\n2. Member Login\n3. Exit")
         choice = input("> ").strip()
         if choice == '1':
-            user = login(args.data_dir, 'librarian')
+            user = librarian_login()
             if user:
                 session['user'] = user
                 librarian_menu(args.data_dir, session)
             else:
                 print("Login failed.")
         elif choice == '2':
-            user = login(args.data_dir, 'member')
+            user = member_login()
             if user:
                 session['user'] = user
                 member_menu(args.data_dir, session)
